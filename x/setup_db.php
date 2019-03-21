@@ -19,21 +19,15 @@ if ($conn->connect_error) {
 
 $sql = "CREATE DATABASE $databaseName";
 if ($conn->query($sql) === TRUE) {
-    echo "<br>";
-    echo "Database created successfully";
+    echo "<br>Database created successfully";
 } else {
-    echo "<br>";
-    echo "Error creating database: " . $conn->error;
+    echo "<br>Error creating database: " . $conn->error;
 }
-$conn->close();
 
-$conn = new mysqli($hostname, $username, $password, $databaseName);
-$sql = "CREATE TABLE loginCredentials ( `id` BIGINT NOT NULL AUTO_INCREMENT , `username` VARCHAR(50) NOT NULL , `password` VARCHAR(50) NOT NULL , `userId` BIGINT NOT NULL , PRIMARY KEY (`id`))";
-if ($conn->query($sql) === TRUE) {
-    echo "<br>";
-    echo "Database table created successfully";
-} else {
-    echo "<br>";
-    echo "Error creating database table: " . $conn->error;
+$conn->select_db($databaseName);
+$fl = file_get_contents('setup_db.sql');
+if($conn->multi_query($fl)== true){
+    echo "<br>SQL execution has been successful";
+}else{
+    echo "<br>" . $conn->error;
 }
-$conn->close();
