@@ -9,7 +9,8 @@
 </head>
 <body>
 <?php include dirname(__FILE__ ) . "/includes/design-top.php" ?>
-<?php include dirname(__FILE__ ) . "/includes/navigation.php" ?>
+<?php include dirname(__FILE__ ) . "/includes/navigation.php"; ?>
+
 
 <?php include dirname(__FILE__ ) . "/includes/content-handler.php" ?>
 </body>
