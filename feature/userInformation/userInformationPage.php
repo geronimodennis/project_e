@@ -1,48 +1,46 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: dengero
- * Date: 22/03/2019
- * Time: 2:09 AM
- */
-?>
-
-<html>
-<header>
-    <?php include ("../../includes/head-tag-contents.php") ?>
-    <link href="../../layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
-    <style>
-        form label {
-            float: left;
-            width: 150px;
-            margin-bottom: 5px;
-            margin-top: 5px;
-        }
-        .clear {
-            display: block;
-            clear: both;
-            width: 100%;
-        }
-
-    </style>
-</header>
-<body>
-<?php include ("../../includes/design-top.php") ?>
-<?php include ("../../includes/navigation.php") ?>
-
-<form id="form1" name="form1" method="post" action="UserInformation">
-    <label for="userid">Userid</label><input type="text" name="userid" id="userid" />
-    <br class="clear" />
-    <label for="name">Name</label><input type="text" name="name" id="name" />
-    <br class="clear" />
-    <label for="lastName">Lastname</label><input type="text" name="lastName" id="lastName" />
-    <br class="clear" />
-    <label for="middleName">Middlename</label><input type="text" name="middleName" id="middleName" />
-    <br class="clear" />
-    <label for="email">Email</label><input type="text" name="email" id="email" />
-    <br class="clear" />
-</form>
-</body>
-</html>
-
-
+<!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+<div class="bootstrap-iso">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <form method="post">
+                    <div class="form-group ">
+                        <label class="control-label requiredField" style="width: 100%" for="name">
+                            Name ML, Surname
+                            <span class="asteriskField">*</span>
+                        </label>
+                        <input class="form-control d-inline-block" style="width: 40%" id="firstName" name="firstName" type="text"/>
+                        <input class="form-control d-inline-block" style="width: 18%" id="midName" name="midName" type="text"/>
+                        <input class="form-control d-inline-block" style="width: 40%" id="lastName" name="lastName" type="text"/>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label requiredField" for="email">
+                            Email
+                            <span class="asteriskField">*</span>
+                        </label>
+                        <input class="form-control" id="email" name="email" type="text"/>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label " for="subject">
+                            Subject
+                        </label>
+                        <input class="form-control" id="subject" name="subject" type="text"/>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label " for="message">
+                            Message
+                        </label>
+                        <textarea class="form-control" cols="40" id="message" name="message" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <button class="btn btn-primary " name="submit" type="submit">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

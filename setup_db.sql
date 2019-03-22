@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2019 at 12:40 PM
+-- Generation Time: Mar 22, 2019 at 06:47 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -32,7 +32,7 @@ CREATE TABLE `logincredentials` (
   `id` bigint(20) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `userId` bigint(20) NOT NULL
+  `userId` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -40,7 +40,8 @@ CREATE TABLE `logincredentials` (
 --
 
 INSERT INTO `logincredentials` (`id`, `username`, `password`, `userId`) VALUES
-(3, 'admin', 'admin', 1);
+(1, 'user', 'user', NULL),
+(2, 'admin', 'admin', 1);
 
 -- --------------------------------------------------------
 
@@ -49,7 +50,7 @@ INSERT INTO `logincredentials` (`id`, `username`, `password`, `userId`) VALUES
 --
 
 CREATE TABLE `userinformation` (
-  `userId` bigint(20) NOT NULL,
+  `userid` bigint(20) NOT NULL,
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `middleName` varchar(50) NOT NULL,
@@ -60,7 +61,7 @@ CREATE TABLE `userinformation` (
 -- Dumping data for table `userinformation`
 --
 
-INSERT INTO `userinformation` (`userId`, `firstName`, `lastName`, `middleName`, `email`) VALUES
+INSERT INTO `userinformation` (`userid`, `firstName`, `lastName`, `middleName`, `email`) VALUES
 (1, 'admin', 'admin', 'a', 'admin@admin.com');
 
 --
@@ -72,14 +73,13 @@ INSERT INTO `userinformation` (`userId`, `firstName`, `lastName`, `middleName`, 
 --
 ALTER TABLE `logincredentials`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `userId` (`userId`);
+  ADD KEY `loginCredentials_ibfk_1` (`userId`);
 
 --
 -- Indexes for table `userinformation`
 --
 ALTER TABLE `userinformation`
-  ADD PRIMARY KEY (`userId`);
+  ADD PRIMARY KEY (`userid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -89,13 +89,13 @@ ALTER TABLE `userinformation`
 -- AUTO_INCREMENT for table `logincredentials`
 --
 ALTER TABLE `logincredentials`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `userinformation`
 --
 ALTER TABLE `userinformation`
-  MODIFY `userId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userid` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -105,7 +105,7 @@ ALTER TABLE `userinformation`
 -- Constraints for table `logincredentials`
 --
 ALTER TABLE `logincredentials`
-  ADD CONSTRAINT `loginCredentials_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinformation` (`userId`);
+  ADD CONSTRAINT `loginCredentials_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `userinformation` (`userid`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
