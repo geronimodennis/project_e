@@ -6,10 +6,13 @@
  * Time: 1:02 AM
  */
 
-$databaseName = 'project_e_db';
-$hostname = 'localhost';
-$username = 'root';
-$password = '';
+$config = include ("config.php");
+
+$databaseName = $config->database;
+$hostname = $config->host;
+$username = $config->username;
+$password = $config->password;
+
 echo "<b>Database Installation</b>";
 
 $conn = new mysqli($hostname, $username, $password);

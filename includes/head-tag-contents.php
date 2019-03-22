@@ -1,3 +1,8 @@
+<?php
+$config = include_once ("config.php");
+session_start();
+?>
+
 <title>Academic Education V2</title>
 
 <script type="text/javascript" src="<?php echo APP_CURRENT_URL?>vendor/jquery/dist/jquery.slim.min.js" ></script>
