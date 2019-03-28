@@ -15,7 +15,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo $username . ' ' . $password . " $sql";
     if(isset($result) && $result->num_rows)
-        while ($row = $result->fetch_assoc()){
+            while ($row = $result->fetch_assoc()){
             $_SESSION[APP_USER_CREDENTIAL_AUTH] = $username;
             header("Location: index.php", true);
             return;
