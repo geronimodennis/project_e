@@ -15,9 +15,12 @@ class UserEntity{
     public $middleName;
 
     private function getInsertStatement(){
-        return "INSERT INTO userinformation ( `firstName`, `lastName`, `middleName`, `email`) VALUES 
-                ('$this->firstName', '$this->lastName', '$this->middleName', '$this->email');
-                select LAST_INSERT_ID() as userid;";
+        return "INSERT INTO userinformation ( firstName, lastName, middleName, email) VALUES 
+                (?, ?, ?, ?);";
+    }
+
+    private function getUpdateStatement(){
+        return "UPDATE userinformation SET firstName=?,lastName=?, middleName=?, email=? WHERE userid=?;";
     }
 
     function getCompleteName(){
@@ -36,20 +39,64 @@ class UserEntity{
         return $completeName;
     }
 
-    function save(){
+    private function saveInsert(){
         $myConn = new myConnection();
         $con = $myConn->connect();
-        $sql = "";
-        if(empty($this->userId)){
-            $sql = $this->getInsertStatement();
-            $con->multi_query($sql);
-            $resultSets = $myConn->getResultSet();
+        $sql = $this->getInsertStatement();
 
-            $this->userId = $resultSets[1][0]['userid'];
-        }else{
+        if(!$stmt = $con->prepare($sql)){
+            die($stmt->error);
+        }
+        $stmt->bind_param("ssss",
+            $this->firstName,
+            $this->lastName,
+            $this->middleName,
+            $this->email);
+
+        $stmt->execute();
+        $this->userId = $stmt->insert_id;
+
+        if($stmt->error){
+            die($stmt->error);
+        }
+        $stmt->close();
+        $con->close();
+
+    }
+
+    private function saveUpdate(){
+        $myConn = new myConnection();
+        $con = $myConn->connect();
+
+        $sql = $this->getUpdateStatement();
+        if(!$stmt = $con->prepare($sql)){
+            die($stmt->error);
         }
 
+        $stmt->bind_param("ssssi",
+            $this->firstName,
+            $this->lastName,
+            $this->middleName,
+            $this->email,
+            $this->userId);
+
+        $stmt->execute();
+
+        if($stmt->error){
+            die($stmt->error);
+        }
+        $stmt->close();
         $con->close();
+    }
+
+    function save(){
+
+        if(empty($this->userId)){
+            $this->saveInsert();
+        }else{
+            $this->saveUpdate();
+        }
+
         return $this;
     }
 }
@@ -61,25 +108,64 @@ class userCredentialEntity {
     public $userId;
 
     private function getInsertStatement(){
-        return "INSERT INTO logincredentials (username, password, userId) VALUES 
-        ('$this->userName','$this->password',$this->userId);
-        select LAST_INSERT_ID() as id;";
+        return "INSERT INTO logincredentials (username, password, userId) VALUES (?,?,?);";
     }
 
-    function save(){
+    private function getUpdateStatement(){
+        return "UPDATE logincredentials SET username=?,password=? WHERE id=?;";
+    }
+
+    private function saveInsert(){
         $myConn = new myConnection();
         $con = $myConn->connect();
-        if(empty($this->id)){
-            $sql = $this->getInsertStatement();
-            $con->multi_query($sql);
-            $resultSets = $myConn->getResultSet();
+        $sql = $this->getInsertStatement();
+        if(!$stmt = $con->prepare($sql)){
+            die($stmt->error);
+        }
+        $stmt->bind_param("ssi",
+            $this->userName,
+            $this->password,
+            $this->userId);
+        $stmt->execute();
+        $this->id = $stmt->insert_id;
 
-            $this->id = $resultSets[1][0]['id'];
-        }else{
+        if($stmt->error){
+            die($stmt->error);
+        }
+        $stmt->close();
+        $con->close();
+    }
 
+    private function saveUpdate(){
+        $myConn = new myConnection();
+        $con = $myConn->connect();
+
+        $sql = $this->getUpdateStatement();
+        if(!$stmt = $con->prepare($sql)){
+            die($stmt->error);
         }
 
+        $stmt->bind_param("ssi",
+            $this->userName,
+            $this->password,
+            $this->id);
+
+        $stmt->execute();
+
+        if($stmt->error){
+            die($stmt->error);
+        }
+        $stmt->close();
         $con->close();
+    }
+
+
+    function save(){
+        if(empty($this->id)){
+            $this->saveInsert();
+        }else{
+            $this->saveUpdate();
+        }
         return $this;
     }
 }

@@ -21,7 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <div class="container-fluid col-md-7 row">
-    <form class="container was-validated" method="post" data-toggle="validator">
+    <form class="container" method="post" data-toggle="validator">
         <div class="form-group ">
             <label class="control-label requiredField" for="userId">
                 User ID
@@ -45,11 +45,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             </label>
             <input type="email" class="form-control" id="email" name="email" value="<?php echo $user->email ?>" required/>
         </div>
+
         <div class="form-group ">
             <label class="control-label " for="username">
                 username
             </label>
-            <input type="text" class="form-control" id="username" name="username" value="<?php echo $credential->userName ?>" required/>
+            <input type="text" class="form-control" id="username" name="username" value="<?php /*echo $credential->userName */?>" required/>
         </div>
         <div class="form-group ">
             <label class="control-label " for="password">
