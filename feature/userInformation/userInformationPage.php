@@ -17,11 +17,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $credential->userName = $_POST["username"];
     $credential->password = $_POST["password"];
     $credential->save();
+}else{
+    if(!empty($_REQUEST["userId"])){
+        $user->userId = $_REQUEST["userId"];
+        $credential->userId = $user->userId;
+        $user->load();
+        $credential->load();
+    }
 }
 ?>
 
 <div class="container-fluid col-md-7 row">
-    <form class="container" method="post" data-toggle="validator">
+    <form class="container was-validated" method="post" data-toggle="validator" role="form">
         <div class="form-group ">
             <label class="control-label requiredField" for="userId">
                 User ID
@@ -50,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label " for="username">
                 username
             </label>
-            <input type="text" class="form-control" id="username" name="username" value="<?php /*echo $credential->userName */?>" required/>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo $credential->userName ?>" required/>
         </div>
         <div class="form-group ">
             <label class="control-label " for="password">

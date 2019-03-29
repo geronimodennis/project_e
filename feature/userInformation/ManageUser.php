@@ -23,6 +23,10 @@ class UserEntity{
         return "UPDATE userinformation SET firstName=?,lastName=?, middleName=?, email=? WHERE userid=?;";
     }
 
+    private function getSelectStatement($whereCondition){
+        return "SELECT * from userinformation $whereCondition";
+    }
+
     function getCompleteName(){
         $completeName = "";
         if(!empty($this->lastName)){
@@ -99,6 +103,44 @@ class UserEntity{
 
         return $this;
     }
+
+
+    private function bindResultRow($row){
+        $this->userId = $row['userid'];
+        $this->firstName = $row['firstName'];
+        $this->lastName = $row['lastName'];
+        $this->middleName = $row['middleName'];
+        $this->email = $row['email'];
+    }
+
+
+    function load(){
+        $myConn = new myConnection();
+        $con = $myConn->connect();
+        $sql = $this->getSelectStatement("WHERE userid=?");
+
+        if(!$stmt = $con->prepare($sql)){
+            if(!$stmt = $con->prepare($sql)){
+                die($stmt->error);
+            }
+        }
+
+        $stmt->bind_param("i",
+            $this->userId);
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            if($row = $result->fetch_assoc()){
+                $this->bindResultRow($row);
+            }
+
+        }else{
+            die($stmt->error);
+        }
+
+        $stmt->close();
+        $con->close();
+    }
 }
 
 class userCredentialEntity {
@@ -113,6 +155,10 @@ class userCredentialEntity {
 
     private function getUpdateStatement(){
         return "UPDATE logincredentials SET username=?,password=? WHERE id=?;";
+    }
+
+    private function getSelectStatement($whereCondition){
+        return "SELECT * from logincredentials $whereCondition";
     }
 
     private function saveInsert(){
@@ -166,6 +212,54 @@ class userCredentialEntity {
         }else{
             $this->saveUpdate();
         }
+        return $this;
+    }
+
+    private function bindResultRow($row){
+        $this->id = $row['id'];
+        $this->userName = $row['username'];
+        $this->password = $row['password'];
+        $this->userId = $row['userId'];
+    }
+
+
+    private function loadByWhereCondition($whereCondition, $filterValue){
+        $myConn = new myConnection();
+        $con = $myConn->connect();
+        $sql = $this->getSelectStatement($whereCondition);
+
+        if(!$stmt = $con->prepare($sql)){
+            if(!$stmt = $con->prepare($sql)){
+                die($stmt->error);
+            }
+        }
+
+        $stmt->bind_param("i",
+            $filterValue);
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            if($row = $result->fetch_assoc()){
+                $this->bindResultRow($row);
+            }
+
+        }else{
+            die($stmt->error);
+        }
+
+        $stmt->close();
+        $con->close();
+    }
+
+    function load(){
+        if(!empty($this->id)){
+            $this->loadByWhereCondition("WHERE id=?", $this->id);
+            return $this;
+        }else if(!empty($this->userId)){
+            $this->loadByWhereCondition("WHERE userid=?", $this->userId);
+            return $this;
+        }
+
         return $this;
     }
 }
