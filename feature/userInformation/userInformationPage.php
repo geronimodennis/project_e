@@ -25,6 +25,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $credential->load();
     }
 }
+
+echo $user->getCompleteName();
 ?>
 
 <div class="container-fluid col-md-7 row">
@@ -56,6 +58,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group ">
             <label class="control-label " for="username">
                 username
+                <span class="asteriskField">*</span>
             </label>
             <input type="text" class="form-control" id="username" name="username" value="<?php echo $credential->userName ?>" required/>
         </div>

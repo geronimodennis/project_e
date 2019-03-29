@@ -9,6 +9,9 @@
         return;
     }else if($_GET['page'] == 'register'){
         include "feature/userInformation/userInformationPage.php";
+    }else if($_GET['page'] == 'userManagement'){
+        include "feature/userInformation/userList.php";
     }
+
     ?>
 </div>

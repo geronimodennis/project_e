@@ -105,7 +105,7 @@ class UserEntity{
     }
 
 
-    private function bindResultRow($row){
+    function bindResultRow($row){
         $this->userId = $row['userid'];
         $this->firstName = $row['firstName'];
         $this->lastName = $row['lastName'];
@@ -266,5 +266,48 @@ class userCredentialEntity {
 
 class ManageUser
 {
+    private function getSelectStatement($whereCondition){
+        return "SELECT * from userinformation $whereCondition";
+    }
 
+    function createUserObject($row){
+        $user = new UserEntity();
+        $user->bindResultRow($row);
+        $user->getCompleteName();
+        return $user;
+    }
+
+
+    function getUserList(){
+        $returnValues = array();
+        $myConn = new myConnection();
+        $con = $myConn->connect();
+        $sql = $this->getSelectStatement("");
+
+        if(!$stmt = $con->prepare($sql)){
+            if(!$stmt = $con->prepare($sql)){
+                die($stmt->error);
+            }
+        }
+
+
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()){
+                $returnValues[]=$this->createUserObject($row);
+                 //array_push($returnValues, $this->createUserObject($row));
+            }
+
+            $result->free();
+        }else{
+            die($stmt->error);
+        }
+
+
+        $stmt->close();
+        $con->close();
+
+        return $returnValues;
+    }
 }
